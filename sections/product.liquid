@@ -56,18 +56,20 @@
         {% form 'product', product, class: 'product-page__form' %}
           <div class="product-page__form-field">
             <label class="product-page__label" for="ProductVariant-{{ section.id }}">Configuration</label>
-            <select id="ProductVariant-{{ section.id }}" name="id" class="product-page__select">
-              {% for variant in product.variants %}
-                <option
-                  value="{{ variant.id }}"
-                  {% if variant == current_variant %}
-                    selected="selected"
-                  {% endif %}
-                >
-                  {{ variant.title }} - {{ variant.price | money }}
-                </option>
-              {% endfor %}
-            </select>
+            <div class="product-page__select-wrap">
+              <select id="ProductVariant-{{ section.id }}" name="id" class="product-page__select">
+                {% for variant in product.variants %}
+                  <option
+                    value="{{ variant.id }}"
+                    {% if variant == current_variant %}
+                      selected="selected"
+                    {% endif %}
+                  >
+                    {{ variant.title }} - {{ variant.price | money }}
+                  </option>
+                {% endfor %}
+              </select>
+            </div>
           </div>
 
           <div class="product-page__form-field">
@@ -305,6 +307,30 @@
     border: 1px solid #d1d5db;
     border-radius: 14px;
     background: #ffffff;
+  }
+
+  .product-page__select {
+    padding-right: 48px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
+
+  .product-page__select-wrap {
+    position: relative;
+  }
+
+  .product-page__select-wrap::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 16px;
+    width: 9px;
+    height: 9px;
+    border-right: 1.5px solid #6b7280;
+    border-bottom: 1.5px solid #6b7280;
+    transform: translateY(-65%) rotate(45deg);
+    pointer-events: none;
   }
 
   .product-page__add-to-cart {
