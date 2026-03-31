@@ -1,0 +1,227 @@
+<section class="faq-accordion full-width">
+  <div class="faq-accordion__inner">
+    <div class="faq-accordion__header">
+      {% if section.settings.eyebrow != blank %}
+        <p class="faq-accordion__eyebrow">{{ section.settings.eyebrow }}</p>
+      {% endif %}
+
+      {% if section.settings.heading != blank %}
+        <h2 class="faq-accordion__title">{{ section.settings.heading }}</h2>
+      {% endif %}
+
+      {% if section.settings.subheading != blank %}
+        <p class="faq-accordion__subtitle">{{ section.settings.subheading }}</p>
+      {% endif %}
+    </div>
+
+    <div class="faq-accordion__items">
+      {% for block in section.blocks %}
+        <details class="faq-accordion__item" {{ block.shopify_attributes }} {% if forloop.first %}open{% endif %}>
+          <summary class="faq-accordion__question">
+            <span>{{ block.settings.question }}</span>
+            <span class="faq-accordion__indicator" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-accordion__answer rte">
+            {{ block.settings.answer }}
+          </div>
+        </details>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .faq-accordion {
+    padding: 12px 20px 72px;
+    background: linear-gradient(180deg, #ffffff 0%, #f7f7fb 100%);
+  }
+
+  .faq-accordion__inner {
+    width: min(1200px, 100%);
+    margin: 0 auto;
+  }
+
+  .faq-accordion__header {
+    max-width: 760px;
+    margin-bottom: 24px;
+  }
+
+  .faq-accordion__eyebrow {
+    margin: 0 0 10px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #7c3aed;
+  }
+
+  .faq-accordion__title {
+    margin: 0 0 12px;
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.05;
+    color: #111827;
+  }
+
+  .faq-accordion__subtitle {
+    margin: 0;
+    max-width: 62ch;
+    color: #4b5563;
+    line-height: 1.7;
+  }
+
+  .faq-accordion__items {
+    border-top: 1px solid #e5e7eb;
+    background: #ffffff;
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.06);
+  }
+
+  .faq-accordion__item {
+    border-bottom: 1px solid #e5e7eb;
+    background: #ffffff;
+  }
+
+  .faq-accordion__question {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 22px 24px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #111827;
+    cursor: pointer;
+  }
+
+  .faq-accordion__question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-accordion__indicator {
+    position: relative;
+    width: 1rem;
+    height: 1rem;
+    flex: 0 0 auto;
+  }
+
+  .faq-accordion__indicator::before,
+  .faq-accordion__indicator::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0.9rem;
+    height: 1px;
+    background: #111827;
+    transform: translate(-50%, -50%);
+    transition: transform 0.2s ease;
+  }
+
+  .faq-accordion__indicator::after {
+    transform: translate(-50%, -50%) rotate(90deg);
+  }
+
+  .faq-accordion__item[open] .faq-accordion__indicator::after {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+
+  .faq-accordion__answer {
+    padding: 0 24px 24px;
+    max-width: 72ch;
+    color: #4b5563;
+    line-height: 1.75;
+  }
+
+  .faq-accordion__answer > * + * {
+    margin-top: 1rem;
+  }
+
+  .faq-accordion__answer ul,
+  .faq-accordion__answer ol {
+    padding-left: 1.25rem;
+  }
+
+  @media (max-width: 749px) {
+    .faq-accordion {
+      padding: 12px 16px 56px;
+    }
+
+    .faq-accordion__question {
+      padding: 18px 18px;
+    }
+
+    .faq-accordion__answer {
+      padding: 0 18px 18px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "FAQ Accordion",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Store information"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Frequently asked questions"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "A simple block-based FAQ section showing reusable Shopify theme blocks in a realistic storefront context."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "faq_item",
+      "name": "FAQ item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "Do you offer nationwide shipping?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer",
+          "default": "<p>For this storefront concept, nationwide transport can be arranged separately depending on destination and carrier availability.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ Accordion",
+      "blocks": [
+        {
+          "type": "faq_item"
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "Can I request more vehicle details before purchase?",
+            "answer": "<p>Yes. Buyers can request additional photos, condition details, and vehicle information before making a purchase decision.</p>"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "Is international export available?",
+            "answer": "<p>International delivery can be discussed case by case depending on destination requirements and logistics.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

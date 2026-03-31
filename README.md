@@ -10,6 +10,7 @@ This project focuses on a boutique JDM car storefront experience:
 
 - custom homepage hero section
 - featured collection section for curated inventory
+- block-based FAQ accordion section built with Shopify theme blocks
 - redesigned collection page
 - redesigned product page
 - redesigned cart page
@@ -30,6 +31,7 @@ This project focuses on a boutique JDM car storefront experience:
 
 - custom `JDM Hero` section with configurable text and image
 - curated `Collection Spotlight` section linked to a Shopify collection
+- custom `FAQ Accordion` section powered by Shopify Blocks
 - premium storefront styling with stronger brand identity
 
 ## Project Structure
@@ -43,6 +45,7 @@ This project focuses on a boutique JDM car storefront experience:
 ├── sections
 │   ├── jdm-hero.liquid
 │   ├── collection-spotlight.liquid
+│   ├── faq-accordion.liquid
 │   ├── collection.liquid
 │   ├── product.liquid
 │   ├── cart.liquid

@@ -30,7 +30,39 @@
         "button_label": "View collection",
         "products_limit": 4
       }
+    },
+    "faq": {
+      "type": "faq-accordion",
+      "settings": {
+        "eyebrow": "Store information",
+        "heading": "Frequently asked questions",
+        "subheading": "This block-based FAQ section demonstrates Shopify theme blocks in a storefront component that still feels natural for a niche automotive shop."
+      },
+      "blocks": {
+        "faq_1": {
+          "type": "faq_item",
+          "settings": {
+            "question": "Do you offer nationwide shipping?",
+            "answer": "<p>For this storefront concept, nationwide transport can be arranged separately depending on destination and carrier availability.</p>"
+          }
+        },
+        "faq_2": {
+          "type": "faq_item",
+          "settings": {
+            "question": "Can I request additional photos or condition details?",
+            "answer": "<p>Yes. Buyers can request extra photos, condition details, and background information before moving forward.</p>"
+          }
+        },
+        "faq_3": {
+          "type": "faq_item",
+          "settings": {
+            "question": "Is international export available?",
+            "answer": "<p>International shipping can be discussed case by case depending on destination rules, logistics, and documentation needs.</p>"
+          }
+        }
+      },
+      "block_order": ["faq_1", "faq_2", "faq_3"]
     }
   },
-  "order": ["hero", "main"]
+  "order": ["hero", "main", "faq"]
 }
