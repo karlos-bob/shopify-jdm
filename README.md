@@ -1,5 +1,7 @@
 # JDM Legends
 
+<img width="898" height="456" alt="image" src="https://github.com/user-attachments/assets/c04cc040-e123-49d8-8dc5-6dd13bad9c88" />
+
 `JDM Legends` is a Shopify storefront concept built on top of a Dawn-style theme foundation and customized with Shopify Liquid, reusable sections, and polished storefront templates.
 
 The goal of the project was to create a small but portfolio-ready automotive storefront that feels closer to a real specialty e-commerce brand than a default theme demo.
