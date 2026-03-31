@@ -9,57 +9,102 @@
 {% assign featured_collection_url = routes.collections_url | append: '/jdm-legends' %}
 
 <footer class="site-footer">
-  <div class="site-footer__brand">
-    <p class="site-footer__title">{{ footer_brand_name }}</p>
-    <p class="site-footer__text">
-      Boutique storefront concept built with Shopify Liquid, custom sections, and polished collection, product, and cart templates.
-    </p>
-  </div>
-
-  <div class="site-footer__links">
-    {% if section.settings.menu != blank and section.settings.menu.links.size > 0 %}
-      {% for link in section.settings.menu.links %}
-        {{ link.title | link_to: link.url }}
-      {% endfor %}
-    {% else %}
-      <a href="{{ routes.root_url }}">Home</a>
-      <a href="{{ featured_collection_url }}">Collection</a>
-      <a href="/pages/about">About</a>
-      <a href="/pages/faq">FAQ</a>
-    {% endif %}
-  </div>
-
-  <div class="site-footer__meta">
-    <div class="site-footer__copyright">
-      &copy; {{ 'now' | date: '%Y' }} {{ footer_brand_name }}
+  <div class="site-footer__grid">
+    <div class="site-footer__column">
+      <p class="site-footer__heading">{{ section.settings.quick_links_title }}</p>
+      <div class="site-footer__links">
+        {% if section.settings.menu != blank and section.settings.menu.links.size > 0 %}
+          {% for link in section.settings.menu.links %}
+            {{ link.title | link_to: link.url }}
+          {% endfor %}
+        {% else %}
+          <a href="{{ routes.root_url }}">Home</a>
+          <a href="{{ featured_collection_url }}">Collection</a>
+          <a href="/pages/about">About</a>
+          <a href="/pages/faq">FAQ</a>
+        {% endif %}
+      </div>
     </div>
 
-    {% if section.settings.show_payment_icons %}
-      <div class="site-footer__payment">
-        {% for type in shop.enabled_payment_types %}
-          {{ type | payment_type_svg_tag }}
-        {% endfor %}
+    <div class="site-footer__column">
+      <p class="site-footer__heading">{{ section.settings.info_links_title }}</p>
+      <div class="site-footer__links">
+        {% if section.settings.info_menu != blank and section.settings.info_menu.links.size > 0 %}
+          {% for link in section.settings.info_menu.links %}
+            {{ link.title | link_to: link.url }}
+          {% endfor %}
+        {% else %}
+          <a href="/pages/about">About</a>
+          <a href="/pages/faq">FAQ</a>
+          <a href="{{ routes.cart_url }}">Cart</a>
+          <a href="{{ featured_collection_url }}">Vehicles</a>
+        {% endif %}
       </div>
-    {% endif %}
+    </div>
+
+    <div class="site-footer__column site-footer__column--mission">
+      <p class="site-footer__heading">{{ section.settings.mission_title }}</p>
+      <p class="site-footer__mission">
+        {{ section.settings.mission_text }}
+      </p>
+    </div>
+  </div>
+
+  <div class="site-footer__bottom">
+    <div class="site-footer__brand">
+      <p class="site-footer__title">{{ footer_brand_name }}</p>
+      <p class="site-footer__text">
+        Boutique storefront concept built with Shopify Liquid, custom sections, and polished collection, product, and cart templates.
+      </p>
+    </div>
+
+    <div class="site-footer__meta">
+      <div class="site-footer__copyright">
+        &copy; {{ 'now' | date: '%Y' }} {{ footer_brand_name }}
+      </div>
+
+      {% if section.settings.show_payment_icons %}
+        <div class="site-footer__payment">
+          {% for type in shop.enabled_payment_types %}
+            {{ type | payment_type_svg_tag }}
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
   </div>
 </footer>
 
 {% stylesheet %}
   .site-footer {
-    display: grid;
-    grid-template-columns: 1.3fr 1fr auto;
-    gap: 24px;
-    margin-top: 2rem;
-    padding: 28px 0 36px;
-    border-top: 1px solid rgba(17, 24, 39, 0.08);
+    margin-top: 0;
+    padding: 20px 0 36px;
   }
 
   .site-footer a {
     text-decoration: none;
     color: #4b5563;
+    width: fit-content;
   }
 
   .site-footer a:hover {
+    color: #111827;
+  }
+
+  .site-footer__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.2fr;
+    gap: 32px;
+    padding-bottom: 24px;
+  }
+
+  .site-footer__column {
+    display: grid;
+    align-content: start;
+    gap: 14px;
+  }
+
+  .site-footer__heading {
+    font-weight: 700;
     color: #111827;
   }
 
@@ -75,15 +120,25 @@
     line-height: 1.65;
   }
 
+  .site-footer__mission {
+    max-width: 34ch;
+    color: #4b5563;
+    line-height: 1.75;
+  }
+
   .site-footer__links,
   .site-footer__payment {
     display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 0.9rem;
   }
 
-  .site-footer__links {
-    align-content: flex-start;
+  .site-footer__bottom {
+    display: grid;
+    grid-template-columns: 1.4fr auto;
+    gap: 24px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(17, 24, 39, 0.08);
   }
 
   .site-footer__meta {
@@ -97,7 +152,8 @@
   }
 
   @media (max-width: 989px) {
-    .site-footer {
+    .site-footer__grid,
+    .site-footer__bottom {
       grid-template-columns: 1fr;
     }
 
@@ -121,6 +177,35 @@
       "type": "link_list",
       "id": "menu",
       "label": "t:labels.menu"
+    },
+    {
+      "type": "text",
+      "id": "quick_links_title",
+      "label": "Quick links title",
+      "default": "Quick links"
+    },
+    {
+      "type": "link_list",
+      "id": "info_menu",
+      "label": "Info menu"
+    },
+    {
+      "type": "text",
+      "id": "info_links_title",
+      "label": "Info links title",
+      "default": "Info"
+    },
+    {
+      "type": "text",
+      "id": "mission_title",
+      "label": "Mission title",
+      "default": "Our mission"
+    },
+    {
+      "type": "textarea",
+      "id": "mission_text",
+      "label": "Mission text",
+      "default": "Curate iconic Japanese performance cars and present them in a cleaner, more premium storefront experience."
     },
     {
       "type": "checkbox",

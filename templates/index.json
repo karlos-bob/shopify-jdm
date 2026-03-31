@@ -62,7 +62,18 @@
         }
       },
       "block_order": ["faq_1", "faq_2", "faq_3"]
+    },
+    "newsletter": {
+      "type": "newsletter-social",
+      "settings": {
+        "eyebrow": "Stay updated",
+        "heading": "Subscribe to new arrivals",
+        "subheading": "Get notified when new collector cars, fresh imports, and storefront updates are added to JDM Legends.",
+        "email_placeholder": "Email",
+        "button_label": "Subscribe",
+        "social_heading": "Follow JDM Legends"
+      }
     }
   },
-  "order": ["hero", "main", "faq"]
+  "order": ["hero", "main", "faq", "newsletter"]
 }
