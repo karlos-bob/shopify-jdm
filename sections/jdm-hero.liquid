@@ -1,0 +1,302 @@
+{% assign hero_collection = collections[section.settings.collection_handle] %}
+{% assign hero_image = section.settings.background_image %}
+
+{% if hero_image == blank and hero_collection != blank and hero_collection.featured_image %}
+  {% assign hero_image = hero_collection.featured_image %}
+{% endif %}
+
+<section class="jdm-hero full-width">
+  <div class="jdm-hero__shell">
+    <div class="jdm-hero__content">
+      {% if section.settings.eyebrow != blank %}
+        <p class="jdm-hero__eyebrow">{{ section.settings.eyebrow }}</p>
+      {% endif %}
+
+      {% if section.settings.heading != blank %}
+        <h1 class="jdm-hero__title">{{ section.settings.heading }}</h1>
+      {% endif %}
+
+      {% if section.settings.subheading != blank %}
+        <p class="jdm-hero__subtitle">{{ section.settings.subheading }}</p>
+      {% endif %}
+
+      <div class="jdm-hero__actions">
+        {% if hero_collection != blank and section.settings.primary_button_label != blank %}
+          <a class="jdm-hero__button jdm-hero__button--primary" href="{{ hero_collection.url }}">
+            {{ section.settings.primary_button_label }}
+          </a>
+        {% endif %}
+
+        {% if section.settings.secondary_button_label != blank %}
+          <a class="jdm-hero__button jdm-hero__button--secondary" href="#home-featured-collection">
+            {{ section.settings.secondary_button_label }}
+          </a>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="jdm-hero__media">
+      {% if hero_image != blank %}
+        {{
+          hero_image
+          | image_url: width: 2000
+          | image_tag: class: 'jdm-hero__image', loading: 'eager', alt: section.settings.heading
+        }}
+      {% else %}
+        <div class="jdm-hero__image jdm-hero__image--placeholder">JDM Legends</div>
+      {% endif %}
+
+      <div class="jdm-hero__overlay"></div>
+      <div class="jdm-hero__stats">
+        <div class="jdm-hero__stat">
+          <span class="jdm-hero__stat-value">{{ hero_collection.products_count | default: 0 }}</span>
+          <span class="jdm-hero__stat-label">Featured vehicles</span>
+        </div>
+        <div class="jdm-hero__stat">
+          <span class="jdm-hero__stat-value">90s</span>
+          <span class="jdm-hero__stat-label">JDM era focus</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .jdm-hero {
+    padding: 28px 20px 20px;
+    background:
+      radial-gradient(circle at top right, rgba(124, 58, 237, 0.1), transparent 34%),
+      linear-gradient(180deg, #ffffff 0%, #f9fafc 100%);
+  }
+
+  .jdm-hero__shell {
+    width: min(1240px, 100%);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 580px);
+    gap: 28px;
+    align-items: stretch;
+    padding: 24px 0 18px;
+  }
+
+  .jdm-hero__content,
+  .jdm-hero__media {
+    min-width: 0;
+  }
+
+  .jdm-hero__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 12px 0;
+  }
+
+  .jdm-hero__eyebrow {
+    margin-bottom: 14px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #7c3aed;
+  }
+
+  .jdm-hero__title {
+    margin-bottom: 18px;
+    font-size: clamp(3rem, 6vw, 5.25rem);
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    color: #111827;
+  }
+
+  .jdm-hero__subtitle {
+    max-width: 60ch;
+    margin-bottom: 28px;
+    color: #525b6b;
+    line-height: 1.7;
+    font-size: 1.05rem;
+  }
+
+  .jdm-hero__actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .jdm-hero__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 50px;
+    padding: 0 20px;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 700;
+    transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+  }
+
+  .jdm-hero__button--primary {
+    background: #111827;
+    color: #ffffff;
+  }
+
+  .jdm-hero__button--primary:hover {
+    background: #1f2937;
+    transform: translateY(-1px);
+  }
+
+  .jdm-hero__button--secondary {
+    border: 1px solid #d1d5db;
+    background: rgba(255, 255, 255, 0.85);
+    color: #111827;
+  }
+
+  .jdm-hero__button--secondary:hover {
+    background: #ffffff;
+    transform: translateY(-1px);
+  }
+
+  .jdm-hero__media {
+    position: relative;
+    overflow: hidden;
+    border-radius: 32px;
+    min-height: 540px;
+    background: #111827;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 24px 52px rgba(15, 23, 42, 0.14);
+  }
+
+  .jdm-hero__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .jdm-hero__image--placeholder {
+    display: grid;
+    place-items: center;
+    color: #ffffff;
+    font-size: 2rem;
+    font-weight: 700;
+  }
+
+  .jdm-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(17, 24, 39, 0.12) 0%, rgba(17, 24, 39, 0.58) 100%);
+  }
+
+  .jdm-hero__stats {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    left: 20px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .jdm-hero__stat {
+    padding: 16px 18px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 20px;
+    background: rgba(17, 24, 39, 0.22);
+    backdrop-filter: blur(14px);
+    color: #ffffff;
+  }
+
+  .jdm-hero__stat-value {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 1.4rem;
+    font-weight: 700;
+  }
+
+  .jdm-hero__stat-label {
+    color: rgba(255, 255, 255, 0.84);
+    font-size: 0.95rem;
+  }
+
+  @media (max-width: 989px) {
+    .jdm-hero__shell {
+      grid-template-columns: 1fr;
+      padding: 18px 0 10px;
+    }
+
+    .jdm-hero__media {
+      min-height: 420px;
+    }
+  }
+
+  @media (max-width: 749px) {
+    .jdm-hero {
+      padding: 20px 16px 12px;
+    }
+
+    .jdm-hero__shell {
+      padding: 10px 0 6px;
+    }
+
+    .jdm-hero__media {
+      min-height: 320px;
+      border-radius: 24px;
+    }
+
+    .jdm-hero__stats {
+      grid-template-columns: 1fr;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "JDM Hero",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Curated import inventory"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "JDM Legends"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "A boutique storefront for iconic Japanese performance cars, featuring hand-picked legends from the golden era of drift, street, and collector culture."
+    },
+    {
+      "type": "text",
+      "id": "collection_handle",
+      "label": "Collection handle",
+      "default": "jdm-legends"
+    },
+    {
+      "type": "text",
+      "id": "primary_button_label",
+      "label": "Primary button label",
+      "default": "Shop collection"
+    },
+    {
+      "type": "text",
+      "id": "secondary_button_label",
+      "label": "Secondary button label",
+      "default": "View featured cars"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image"
+    }
+  ],
+  "presets": [
+    {
+      "name": "JDM Hero"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,133 @@
+{% assign footer_brand_name = section.settings.brand_name %}
+{% if footer_brand_name == blank %}
+  {% if shop.name == 'My Store' %}
+    {% assign footer_brand_name = 'JDM Legends' %}
+  {% else %}
+    {% assign footer_brand_name = shop.name %}
+  {% endif %}
+{% endif %}
+{% assign featured_collection_url = routes.collections_url | append: '/jdm-legends' %}
+
+<footer class="site-footer">
+  <div class="site-footer__brand">
+    <p class="site-footer__title">{{ footer_brand_name }}</p>
+    <p class="site-footer__text">
+      Boutique storefront concept built with Shopify Liquid, custom sections, and polished collection, product, and cart templates.
+    </p>
+  </div>
+
+  <div class="site-footer__links">
+    {% if section.settings.menu != blank and section.settings.menu.links.size > 0 %}
+      {% for link in section.settings.menu.links %}
+        {{ link.title | link_to: link.url }}
+      {% endfor %}
+    {% else %}
+      <a href="{{ routes.root_url }}">Home</a>
+      <a href="{{ featured_collection_url }}">Collection</a>
+      <a href="/pages/about">About</a>
+      <a href="/pages/faq">FAQ</a>
+    {% endif %}
+  </div>
+
+  <div class="site-footer__meta">
+    <div class="site-footer__copyright">
+      &copy; {{ 'now' | date: '%Y' }} {{ footer_brand_name }}
+    </div>
+
+    {% if section.settings.show_payment_icons %}
+      <div class="site-footer__payment">
+        {% for type in shop.enabled_payment_types %}
+          {{ type | payment_type_svg_tag }}
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</footer>
+
+{% stylesheet %}
+  .site-footer {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr auto;
+    gap: 24px;
+    margin-top: 2rem;
+    padding: 28px 0 36px;
+    border-top: 1px solid rgba(17, 24, 39, 0.08);
+  }
+
+  .site-footer a {
+    text-decoration: none;
+    color: #4b5563;
+  }
+
+  .site-footer a:hover {
+    color: #111827;
+  }
+
+  .site-footer__title {
+    margin-bottom: 8px;
+    font-weight: 700;
+    color: #111827;
+  }
+
+  .site-footer__text {
+    max-width: 46ch;
+    color: #6b7280;
+    line-height: 1.65;
+  }
+
+  .site-footer__links,
+  .site-footer__payment {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .site-footer__links {
+    align-content: flex-start;
+  }
+
+  .site-footer__meta {
+    display: grid;
+    gap: 12px;
+    justify-items: end;
+  }
+
+  .site-footer__copyright {
+    color: #6b7280;
+  }
+
+  @media (max-width: 989px) {
+    .site-footer {
+      grid-template-columns: 1fr;
+    }
+
+    .site-footer__meta {
+      justify-items: start;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.footer",
+  "settings": [
+    {
+      "type": "text",
+      "id": "brand_name",
+      "label": "Brand name",
+      "default": "JDM Legends"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "t:labels.menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_payment_icons",
+      "label": "t:labels.show_payment_icons",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

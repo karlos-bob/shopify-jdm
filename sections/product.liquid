@@ -1,0 +1,373 @@
+{% comment %}
+  This section is used in the product template to render product page with
+  media, content, and add-to-cart form.
+
+  https://shopify.dev/docs/storefronts/themes/architecture/templates/product
+{% endcomment %}
+
+{% assign current_variant = product.selected_or_first_available_variant %}
+
+<section class="product-page full-width">
+  <div class="product-page__inner">
+    <div class="product-page__media">
+      {% if product.featured_image %}
+        <div class="product-page__featured-media">
+          {{ product.featured_image | image_url: width: 1600 | image_tag: class: 'product-page__featured-image', loading: 'eager', alt: product.title }}
+        </div>
+      {% endif %}
+
+      {% if product.images.size > 1 %}
+        <div class="product-page__gallery">
+          {% for image in product.images %}
+            <div class="product-page__gallery-item">
+              {{ image | image_url: width: 800 | image_tag: class: 'product-page__gallery-image', loading: 'lazy', alt: product.title }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="product-page__details">
+      <div class="product-page__card">
+        <p class="product-page__eyebrow">Featured vehicle</p>
+        <h1 class="product-page__title">{{ product.title }}</h1>
+
+        <div class="product-page__price-row">
+          <p class="product-page__price">{{ current_variant.price | money }}</p>
+
+          {% if current_variant.available %}
+            <span class="product-page__badge">Available</span>
+          {% else %}
+            <span class="product-page__badge product-page__badge--muted">Sold out</span>
+          {% endif %}
+        </div>
+
+        <div class="product-page__meta">
+          <div class="product-page__meta-item">
+            <span class="product-page__meta-label">Vendor</span>
+            <span class="product-page__meta-value">{{ product.vendor | default: 'JDM Legends' }}</span>
+          </div>
+          <div class="product-page__meta-item">
+            <span class="product-page__meta-label">Type</span>
+            <span class="product-page__meta-value">{{ product.type | default: 'Collector car' }}</span>
+          </div>
+        </div>
+
+        {% form 'product', product, class: 'product-page__form' %}
+          <div class="product-page__form-field">
+            <label class="product-page__label" for="ProductVariant-{{ section.id }}">Configuration</label>
+            <select id="ProductVariant-{{ section.id }}" name="id" class="product-page__select">
+              {% for variant in product.variants %}
+                <option
+                  value="{{ variant.id }}"
+                  {% if variant == current_variant %}
+                    selected="selected"
+                  {% endif %}
+                >
+                  {{ variant.title }} - {{ variant.price | money }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="product-page__form-field">
+            <label class="product-page__label" for="ProductQuantity-{{ section.id }}">Quantity</label>
+            <input
+              id="ProductQuantity-{{ section.id }}"
+              class="product-page__quantity"
+              type="number"
+              name="quantity"
+              min="1"
+              value="1"
+            >
+          </div>
+
+          <button class="product-page__add-to-cart" type="submit" {% unless current_variant.available %}disabled{% endunless %}>
+            {% if current_variant.available %}
+              Add to cart
+            {% else %}
+              Sold out
+            {% endif %}
+          </button>
+
+          <div class="product-page__dynamic-checkout">
+            {{ form | payment_button }}
+          </div>
+        {% endform %}
+      </div>
+    </div>
+  </div>
+
+  {% if product.description != blank %}
+    <div class="product-page__description-section">
+      <div class="product-page__description-card">
+        <p class="product-page__section-label">Vehicle details</p>
+        <h2 class="product-page__section-title">About this vehicle</h2>
+        <div class="product-page__description rte">
+          {{ product.description }}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+</section>
+
+{% stylesheet %}
+  .product-page {
+    padding: 48px 20px 72px;
+    background: linear-gradient(180deg, #f7f7fb 0%, #ffffff 100%);
+  }
+
+  .product-page__inner {
+    width: min(1200px, 100%);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+    gap: 32px;
+    align-items: start;
+  }
+
+  .product-page__media,
+  .product-page__details {
+    min-width: 0;
+  }
+
+  .product-page__details {
+    position: sticky;
+    top: 24px;
+  }
+
+  .product-page__featured-media,
+  .product-page__gallery-item,
+  .product-page__card {
+    overflow: hidden;
+    background: #ffffff;
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+  }
+
+  .product-page__featured-media {
+    margin-bottom: 20px;
+  }
+
+  .product-page__featured-image {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+  }
+
+  .product-page__gallery {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .product-page__gallery-image {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+  }
+
+  .product-page__card {
+    padding: 32px;
+  }
+
+  .product-page__eyebrow {
+    margin-bottom: 12px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #7c3aed;
+  }
+
+  .product-page__title {
+    margin-bottom: 16px;
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.05;
+  }
+
+  .product-page__price-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  .product-page__price {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #111827;
+  }
+
+  .product-page__badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: #dcfce7;
+    color: #166534;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .product-page__badge--muted {
+    background: #e5e7eb;
+    color: #374151;
+  }
+
+  .product-page__description {
+    color: #374151;
+    line-height: 1.65;
+  }
+
+  .product-page__description > * + * {
+    margin-top: 1rem;
+  }
+
+  .product-page__description ul,
+  .product-page__description ol {
+    padding-left: 1.25rem;
+  }
+
+  .product-page__description-section {
+    width: min(1200px, 100%);
+    margin: 28px auto 0;
+  }
+
+  .product-page__description-card {
+    padding: 32px;
+    background: #ffffff;
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+  }
+
+  .product-page__section-label {
+    margin-bottom: 8px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #7c3aed;
+  }
+
+  .product-page__section-title {
+    margin-bottom: 20px;
+    font-size: clamp(1.5rem, 2vw, 2rem);
+    line-height: 1.1;
+    color: #111827;
+  }
+
+  .product-page__meta {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin: 28px 0;
+  }
+
+  .product-page__meta-item {
+    padding: 14px 16px;
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+  }
+
+  .product-page__meta-label {
+    display: block;
+    margin-bottom: 4px;
+    color: #6b7280;
+    font-size: 0.9rem;
+  }
+
+  .product-page__meta-value {
+    font-weight: 600;
+    color: #111827;
+  }
+
+  .product-page__form {
+    display: grid;
+    gap: 16px;
+  }
+
+  .product-page__form-field {
+    display: grid;
+    gap: 8px;
+  }
+
+  .product-page__label {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #111827;
+  }
+
+  .product-page__select,
+  .product-page__quantity {
+    width: 100%;
+    min-height: 48px;
+    padding: 0 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 14px;
+    background: #ffffff;
+  }
+
+  .product-page__add-to-cart {
+    min-height: 52px;
+    border: 0;
+    border-radius: 999px;
+    background: #111827;
+    color: #ffffff;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease;
+  }
+
+  .product-page__add-to-cart:hover:not(:disabled) {
+    background: #1f2937;
+    transform: translateY(-1px);
+  }
+
+  .product-page__add-to-cart:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+  }
+
+  .product-page__dynamic-checkout {
+    margin-top: 4px;
+  }
+
+  @media (max-width: 989px) {
+    .product-page__inner {
+      grid-template-columns: 1fr;
+    }
+
+    .product-page__details {
+      position: static;
+    }
+
+    .product-page__card {
+      padding: 24px;
+    }
+
+    .product-page__description-card {
+      padding: 24px;
+    }
+  }
+
+  @media (max-width: 749px) {
+    .product-page {
+      padding: 32px 16px 56px;
+    }
+
+    .product-page__gallery,
+    .product-page__meta {
+      grid-template-columns: 1fr;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.product",
+  "settings": [],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

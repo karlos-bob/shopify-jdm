@@ -1,0 +1,36 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero": {
+      "type": "jdm-hero",
+      "settings": {
+        "eyebrow": "Curated import inventory",
+        "heading": "JDM Legends",
+        "subheading": "A boutique storefront concept for iconic Japanese performance cars, built with Shopify Liquid, custom sections, and polished collection, product, and cart experiences.",
+        "collection_handle": "jdm-legends",
+        "primary_button_label": "Shop collection",
+        "secondary_button_label": "View featured cars"
+      }
+    },
+    "main": {
+      "type": "collection-spotlight",
+      "settings": {
+        "eyebrow": "Featured collection",
+        "heading": "JDM Legends",
+        "subheading": "Explore a curated lineup of drift favorites, collector icons, and era-defining Japanese performance machines.",
+        "collection_handle": "jdm-legends",
+        "button_label": "View collection",
+        "products_limit": 4
+      }
+    }
+  },
+  "order": ["hero", "main"]
+}

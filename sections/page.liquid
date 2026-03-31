@@ -1,0 +1,90 @@
+{% comment %}
+  This section is used in the page template to render store pages like About us
+  or Contact us.
+
+  https://shopify.dev/docs/storefronts/themes/architecture/templates/page
+{% endcomment %}
+
+<section class="store-page full-width">
+  <div class="store-page__inner">
+    <div class="store-page__hero">
+      <p class="store-page__eyebrow">Store information</p>
+      <h1 class="store-page__title">{{ page.title }}</h1>
+    </div>
+
+    <div class="store-page__content rte">
+      {{ page.content }}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .store-page {
+    padding: 40px 20px 72px;
+    background: linear-gradient(180deg, #f7f7fb 0%, #ffffff 100%);
+  }
+
+  .store-page__inner {
+    width: min(1200px, 100%);
+    margin: 0 auto;
+  }
+
+  .store-page__hero {
+    margin-bottom: 24px;
+  }
+
+  .store-page__eyebrow {
+    margin-bottom: 8px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #7c3aed;
+  }
+
+  .store-page__title {
+    font-size: clamp(2rem, 4vw, 3.25rem);
+    line-height: 1.05;
+    color: #111827;
+  }
+
+  .store-page__content {
+    width: 100%;
+    padding: 32px;
+    background: #ffffff;
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+    color: #374151;
+    line-height: 1.75;
+  }
+
+  .store-page__content > * + * {
+    margin-top: 1rem;
+  }
+
+  .store-page__content h2,
+  .store-page__content h3 {
+    color: #111827;
+  }
+
+  .store-page__content ul,
+  .store-page__content ol {
+    padding-left: 1.25rem;
+  }
+
+  @media (max-width: 749px) {
+    .store-page {
+      padding: 32px 16px 56px;
+    }
+
+    .store-page__content {
+      padding: 24px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.page",
+  "settings": []
+}
+{% endschema %}

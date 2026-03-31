@@ -1,0 +1,234 @@
+{% assign brand_name = section.settings.brand_name %}
+{% if brand_name == blank %}
+  {% if shop.name == 'My Store' %}
+    {% assign brand_name = 'JDM Legends' %}
+  {% else %}
+    {% assign brand_name = shop.name %}
+  {% endif %}
+{% endif %}
+{% assign featured_collection_url = routes.collections_url | append: '/jdm-legends' %}
+
+<header class="site-header">
+  <a class="site-header__brand" href="{{ routes.root_url }}">
+    <span class="site-header__brand-mark">JL</span>
+    {% comment %} <span class="site-header__brand-copy">
+      <span class="site-header__title">{{ brand_name }}</span>
+    </span> {% endcomment %}
+  </a>
+
+  <nav class="site-header__menu" aria-label="Main navigation">
+    {% if section.settings.menu != blank and section.settings.menu.links.size > 0 %}
+      {% for link in section.settings.menu.links %}
+        {{ link.title | link_to: link.url }}
+      {% endfor %}
+    {% else %}
+      <a href="{{ routes.root_url }}">Home</a>
+      <a href="{{ featured_collection_url }}">Collection</a>
+      <a href="/pages/about">About</a>
+      <a href="/pages/faq">FAQ</a>
+    {% endif %}
+  </nav>
+
+  <div class="site-header__icons">
+    {% if shop.customer_accounts_enabled %}
+      <shopify-account class="site-header__icon-link" menu="{{ section.settings.customer_account_menu }}">
+        {{ 'icon-account.svg' | inline_asset_content }}
+      </shopify-account>
+    {% endif %}
+
+    <a class="site-header__icon-link" href="{{ routes.cart_url }}" aria-label="Cart">
+      {% if cart.item_count > 0 %}
+        <sup>{{ cart.item_count }}</sup>
+      {% endif %}
+
+      {{ 'icon-cart.svg' | inline_asset_content }}
+    </a>
+  </div>
+</header>
+
+{% stylesheet %}
+  .site-header {
+    min-height: 5.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(17, 24, 39, 0.08);
+    background: rgba(255, 255, 255, 0.82);
+    backdrop-filter: blur(12px);
+  }
+
+  .site-header a {
+    position: relative;
+    text-decoration: none;
+    color: var(--color-foreground);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .site-header__brand {
+    gap: 0.85rem;
+    justify-content: flex-start;
+  }
+
+  .site-header__brand-mark {
+    display: inline-flex;
+    width: 2.75rem;
+    height: 2.75rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: #111827;
+    color: #ffffff;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .site-header__brand-copy {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .site-header__title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #111827;
+    line-height: 1.1;
+  }
+
+  .site-header__tagline {
+    font-size: 0.82rem;
+    color: #6b7280;
+    line-height: 1.1;
+  }
+
+  .site-header__menu {
+    display: flex;
+    gap: 1.25rem;
+    align-items: center;
+    justify-content: flex-start;
+    flex: 1 1 auto;
+  }
+
+  .site-header__menu a {
+    padding: 0.35rem 0;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    color: #374151;
+    transition: color 0.2s ease;
+  }
+
+  .site-header__menu a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -0.15rem;
+    height: 1px;
+    background: #111827;
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.2s ease;
+  }
+
+  .site-header__menu a:hover {
+    color: #111827;
+  }
+
+  .site-header__menu a:hover::after,
+  .site-header__menu a:focus-visible::after {
+    transform: scaleX(1);
+  }
+
+  .site-header__menu a:focus-visible {
+    outline: none;
+    color: #111827;
+  }
+
+  .site-header__icons {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+  }
+
+  .site-header__icon-link {
+    width: 2.6rem;
+    height: 2.6rem;
+    border-radius: 999px;
+    background: #f3f4f6;
+  }
+
+  .site-header a sup {
+    position: absolute;
+    top: -0.35rem;
+    right: -0.25rem;
+    width: 1.1rem;
+    height: 1.1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: #7c3aed;
+    color: #ffffff;
+    font-size: 0.7rem;
+    overflow: hidden;
+  }
+
+  .site-header svg {
+    width: 1.2rem;
+  }
+
+  @media (max-width: 989px) {
+    .site-header {
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
+    .site-header__menu {
+      order: 3;
+      width: 100%;
+      justify-content: flex-start;
+      overflow-x: auto;
+      padding-bottom: 0.25rem;
+    }
+  }
+
+  @media (max-width: 749px) {
+    .site-header__tagline {
+      display: none;
+    }
+
+    .site-header__menu {
+      gap: 1rem;
+      font-size: 0.95rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.header",
+  "settings": [
+    {
+      "type": "text",
+      "id": "brand_name",
+      "label": "Brand name",
+      "default": "JDM Legends"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "t:labels.menu"
+    },
+    {
+      "type": "link_list",
+      "id": "customer_account_menu",
+      "label": "t:labels.customer_account_menu",
+      "default": "customer-account-main-menu"
+    }
+  ]
+}
+{% endschema %}

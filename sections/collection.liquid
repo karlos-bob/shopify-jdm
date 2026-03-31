@@ -1,0 +1,256 @@
+{% comment %}
+  This section is used in the collection template to render collection page
+  listing all products within a collection.
+
+  https://shopify.dev/docs/storefronts/themes/architecture/templates/collection
+{% endcomment %}
+
+<section class="collection-page full-width">
+  <div class="collection-page__inner">
+    <div class="collection-page__hero">
+      <div class="collection-page__hero-content">
+        <p class="collection-page__eyebrow">Featured collection</p>
+        <h1 class="collection-page__title">{{ collection.title }}</h1>
+
+        {% if collection.description != blank %}
+          <div class="collection-page__description rte">
+            {{ collection.description }}
+          </div>
+        {% else %}
+          <p class="collection-page__description">
+            A curated selection of iconic JDM vehicles, chosen for enthusiasts, collectors, and dream garage builds.
+          </p>
+        {% endif %}
+      </div>
+
+      {% if collection.featured_image %}
+        <div class="collection-page__hero-media">
+          {{ collection.featured_image | image_url: width: 1600 | image_tag: class: 'collection-page__hero-image', loading: 'eager', alt: collection.title }}
+        </div>
+      {% endif %}
+    </div>
+
+    {% paginate collection.products by 12 %}
+      {% if collection.products_count > 0 %}
+        <div class="collection-page__toolbar">
+          <p class="collection-page__results">
+            {{ collection.products_count }}
+            {% if collection.products_count == 1 %}
+              vehicle
+            {% else %}
+              vehicles
+            {% endif %}
+          </p>
+        </div>
+
+        <div class="collection-page__grid">
+          {% for product in collection.products %}
+            <a class="collection-page__card" href="{{ product.url }}">
+              <div class="collection-page__card-media">
+                {% if product.featured_image %}
+                  {{ product.featured_image | image_url: width: 900 | image_tag: class: 'collection-page__card-image', loading: 'lazy', alt: product.title }}
+                {% else %}
+                  <div class="collection-page__card-image collection-page__card-image--empty">No image</div>
+                {% endif %}
+              </div>
+
+              <div class="collection-page__card-content">
+                <h2 class="collection-page__card-title">{{ product.title }}</h2>
+                <p class="collection-page__card-price">{{ product.price | money }}</p>
+              </div>
+            </a>
+          {% endfor %}
+        </div>
+
+        {% if paginate.pages > 1 %}
+          <div class="collection-page__pagination">
+            {{ paginate | default_pagination }}
+          </div>
+        {% endif %}
+      {% else %}
+        <div class="collection-page__empty">
+          <h2 class="collection-page__empty-title">No vehicles available</h2>
+          <p class="collection-page__empty-text">Add products to this collection to populate the storefront grid.</p>
+        </div>
+      {% endif %}
+    {% endpaginate %}
+  </div>
+</section>
+
+{% stylesheet %}
+  .collection-page {
+    padding: 40px 20px 72px;
+    background: linear-gradient(180deg, #f7f7fb 0%, #ffffff 100%);
+  }
+
+  .collection-page__inner {
+    width: min(1200px, 100%);
+    margin: 0 auto;
+  }
+
+  .collection-page__hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 520px);
+    gap: 28px;
+    align-items: center;
+    margin-bottom: 36px;
+  }
+
+  .collection-page__eyebrow {
+    margin-bottom: 10px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #7c3aed;
+  }
+
+  .collection-page__title {
+    margin-bottom: 14px;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    line-height: 1.02;
+    color: #111827;
+  }
+
+  .collection-page__description {
+    max-width: 68ch;
+    color: #4b5563;
+    line-height: 1.65;
+  }
+
+  .collection-page__description > * + * {
+    margin-top: 1rem;
+  }
+
+  .collection-page__hero-media {
+    overflow: hidden;
+    background: #ffffff;
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+  }
+
+  .collection-page__hero-image {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+
+  .collection-page__toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+  }
+
+  .collection-page__results {
+    color: #6b7280;
+    font-weight: 600;
+  }
+
+  .collection-page__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  .collection-page__card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: #ffffff;
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .collection-page__card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 24px 48px rgba(15, 23, 42, 0.12);
+  }
+
+  .collection-page__card-media {
+    background: #f3f4f6;
+  }
+
+  .collection-page__card-image {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+  }
+
+  .collection-page__card-image--empty {
+    display: grid;
+    place-items: center;
+    color: #6b7280;
+  }
+
+  .collection-page__card-content {
+    padding: 18px;
+  }
+
+  .collection-page__card-title {
+    margin-bottom: 8px;
+    font-size: 1.05rem;
+    line-height: 1.35;
+    color: #111827;
+  }
+
+  .collection-page__card-price {
+    color: #4b5563;
+    font-weight: 700;
+  }
+
+  .collection-page__pagination {
+    margin-top: 32px;
+  }
+
+  .collection-page__pagination .pagination {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .collection-page__empty {
+    padding: 32px;
+    background: #ffffff;
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+    text-align: center;
+  }
+
+  .collection-page__empty-title {
+    margin-bottom: 10px;
+    color: #111827;
+  }
+
+  .collection-page__empty-text {
+    color: #6b7280;
+  }
+
+  @media (max-width: 989px) {
+    .collection-page__hero {
+      grid-template-columns: 1fr;
+    }
+
+    .collection-page__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 749px) {
+    .collection-page {
+      padding: 32px 16px 56px;
+    }
+
+    .collection-page__grid {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.collection",
+  "settings": []
+}
+{% endschema %}
