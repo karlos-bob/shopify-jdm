@@ -1,5 +1,7 @@
 # JDM Legends
 
+[Open JDM Legends](https://hk9smu-0h.myshopify.com/)
+
 <img width="898" height="456" alt="image" src="https://github.com/user-attachments/assets/c04cc040-e123-49d8-8dc5-6dd13bad9c88" />
 
 `JDM Legends` is a Shopify storefront concept built on top of a Dawn-style theme foundation and customized with Shopify Liquid, reusable sections, and polished storefront templates.
